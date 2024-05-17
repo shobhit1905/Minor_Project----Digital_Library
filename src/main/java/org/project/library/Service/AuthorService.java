@@ -21,6 +21,9 @@ public class AuthorService {
 
     public Author addNewAuthor(Author author) {
         return authorRepository.save(author) ;
+
+        // save() -> for saving it uses persist
+        //        -> for updating it uses merge
     }
 
     public Author fetchDetailsByAuthorName(String authorName)
