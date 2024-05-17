@@ -105,16 +105,14 @@ public class BookController {
     @DeleteMapping
     public ResponseEntity<String> deleteBook(@RequestBody DeleteBookDTO deleteBookDTO)
     {
-        String deleted = bookService.deleteBook(deleteBookDTO) ;
+        String deleted =  bookService.deleteBook(deleteBookDTO) ;
 
         if(deleted != null)
-            return new ResponseEntity<>(String.format("Details for BookID : %d and BookName : %s , deleted successfully", deleteBookDTO.getBookId(),deleteBookDTO.getBookName())
-            , HttpStatus.OK) ;
+            return new ResponseEntity<>(deleted, HttpStatus.OK) ;
         else
         {
             log.error(String.format("Details for BookId : %d and BookName : %s cannot be deleted" , deleteBookDTO.getBookId(),deleteBookDTO.getBookName()));
-            return new ResponseEntity<>((String.format("Details for BookId : %d and BookName : %s cannot be deleted" , deleteBookDTO.getBookId(),deleteBookDTO.getBookName()))
-            , HttpStatus.BAD_REQUEST) ;
+            throw new DataNotFoundException("Cannot find the book , invalid book id") ;
         }
     }
 

@@ -57,8 +57,14 @@ public class BookService {
     public String deleteBook(DeleteBookDTO object) {
 
         Integer id = object.getBookId() ;
-        bookRepository.deleteById(id);
-        return "Book deleted" ;
+        Book b = bookRepository.findBookById(id) ;
+        if(b != null)
+        {
+            bookRepository.deleteById(id);
+            return (String.format("Details for BookID : %d and BookName : %s , deleted successfully", id, object.getBookName()));
+        }
+        else
+            return null ;
     }
 
     public Book updateBookPrice(UpdateBookDTO updateBookDTO)
