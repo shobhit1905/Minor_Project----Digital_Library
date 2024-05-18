@@ -83,7 +83,14 @@ public class BookController {
         }
 
         List<Book> books = bookService.fetchAllBooksByAuthor(authorName);
-        return new ResponseEntity<>(books, HttpStatus.FOUND);
+
+        if(books != null)
+            return new ResponseEntity<>(books, HttpStatus.FOUND);
+        else
+        {
+            log.error(String.format("No such author ExistS")) ;
+            throw new BadRequestException(String.format("No such author ExistS : %s",authorName));
+        }
     }
 
     @GetMapping("/genre/{genre}")

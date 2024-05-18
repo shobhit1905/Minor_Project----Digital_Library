@@ -71,12 +71,12 @@ public class AuthorController {
     @GetMapping
     public ResponseEntity<List<Author>> fetchDetailsOfAllAuthors()
     {
-        if(authorService.fetchDetailsOfAllAuthors() == null)
+        if(authorService.fetchDetailsOfAllAuthors() != null)
         return new ResponseEntity<>(authorService.fetchDetailsOfAllAuthors() , HttpStatus.OK) ;
 
         else {
             log.error("Error while fetching details of all Authors");
-            return null ;
+            throw new BadRequestException("Error while fetching details of all Authors") ;
         }
     }
 
