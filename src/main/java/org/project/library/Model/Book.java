@@ -51,4 +51,9 @@ public class Book {
     @JoinColumn(name = "author_id")
     private Author author ;
 
+    // Relationship with user := many books can be read by many users
+
+    @ManyToMany(mappedBy = "issuedBooks")
+    @JsonBackReference
+    List<User> users = new ArrayList<>() ;
 }
