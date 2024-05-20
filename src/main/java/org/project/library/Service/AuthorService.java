@@ -10,6 +10,7 @@ import org.project.library.Repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -54,8 +55,32 @@ public class AuthorService {
 
     public String deleteAuthor(DeleteAuthorDTO deleteAuthorDTO)
     {
-        Integer id = deleteAuthorDTO.getAuthorId() ;
-        authorRepository.deleteById(id);
-        return "Author deleted" ;
+        try {
+            Integer id = deleteAuthorDTO.getAuthorId() ;
+            authorRepository.deleteById(id);
+            return "Author deleted" ;
+        }
+        catch (DataNotFoundException e)
+        {
+            return null ;
+        }
+
+    }
+
+    public void uploadAuthorDataToDatabase(String fileContent) {
+
+        List<String> authorsData = List.of(fileContent.split("\n")) ;
+        List<Author> authors = new ArrayList<>() ;
+        for(int i = 1 ; i < authorsData.size() ; i ++)
+        {
+            String[] row = authorsData.get(i).split(",") ;
+            authors.add(Author.builder()
+                    .authorId(Integer.valueOf(row[0]))
+                    .authorName(row[1])
+                    .authorAddress(row[2])
+                    .build()) ;
+        }
+
+        authorRepository.saveAll(authors) ;
     }
 }

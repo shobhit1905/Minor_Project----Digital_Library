@@ -16,7 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Validated
@@ -104,6 +106,14 @@ public class AuthorController {
             return new ResponseEntity<>(ans, HttpStatus.OK) ;
         else
             return new ResponseEntity<>("Error while deleting author" , HttpStatus.BAD_REQUEST) ;
+    }
+
+    @PostMapping("/upload-csv")
+    public void uploadDataToDatabase(@RequestPart("file") MultipartFile multipartFile) throws IOException
+    {
+        String fileContent = new String(multipartFile.getBytes());
+        authorService.uploadAuthorDataToDatabase(fileContent);
+
     }
 
 

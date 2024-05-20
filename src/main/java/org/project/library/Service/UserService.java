@@ -1,5 +1,6 @@
 package org.project.library.Service;
 
+import org.project.library.Dto.UpdateUserEmailDTO;
 import org.project.library.Model.Book;
 import org.project.library.Model.User;
 import org.project.library.Repository.UserRepository;
@@ -26,12 +27,33 @@ public class UserService {
         return userRepository.findAll() ;
     }
 
-    public List<Book> fetchAllBooksIssuesToUser(String userName)
+    public List<User> fetchAllBooksIssuedToUser(String userName)
     {
         User user = userRepository.findByName(userName) ;
         Integer id = user.getUserId() ;
 
-        return userRepository.findAllBooksIssuedToUser(id) ;
+        return userRepository.findById(user.getUserId()).stream().toList();
+    }
 
+    public String deleteUserByName(String userName)
+    {
+        User user = userRepository.findByName(userName) ;
+
+        if(user != null)
+        {
+            userRepository.deleteById(user.getUserId());
+            return "User deleted" ;
+        }
+        else
+            return "User Not Found" ;
+    }
+
+    public boolean updateUserEmail(UpdateUserEmailDTO obj)
+    {
+        User user = userRepository.findById(obj.getUserId()).get() ;
+        String newEmail = obj.getNewEmail() ;
+        user.setUserEmail(newEmail);
+        return true ;
     }
 }
+
