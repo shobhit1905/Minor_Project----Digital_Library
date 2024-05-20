@@ -1,8 +1,10 @@
 package org.project.library.Controller;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.project.library.Dto.UpdateUserEmailDTO;
+import org.project.library.Dto.UpdateUserMobileDTO;
 import org.project.library.Exceptions.DataNotFoundException;
 import org.project.library.Model.Book;
 import org.project.library.Model.User;
@@ -90,23 +92,15 @@ public class UserController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<String> updateUserEmail(@RequestBody UpdateUserEmailDTO object)
+    @PutMapping("/mob")
+    public ResponseEntity<String> updateUserNumber(@RequestBody @Valid UpdateUserMobileDTO object)
     {
-        User user = userRepository.findById(object.getUserId()).get() ;
+        return new ResponseEntity<>(userService.updateUserMobile(object) , HttpStatus.OK) ;
+    }
 
-        if(user == null)
-        {
-            log.error(String.format("No user with user name : %s exists", object.getUserName()));
-            throw new DataNotFoundException(String.format("No user with user name : %s exists", object.getUserName()));
-        }
-        else
-        {
-            boolean updated = userService.updateUserEmail(object) ;
-            if(updated)
-                return new ResponseEntity<>(String.format("Email for User with name : %s has been updated", object.getUserName()), HttpStatus.OK) ;
-            else
-                return new ResponseEntity<>("Not able to update user email", HttpStatus.BAD_REQUEST) ;
-        }
+    @PutMapping("/mail")
+    public ResponseEntity<String> updateUserEmail(@RequestBody @Valid UpdateUserEmailDTO object)
+    {
+        return new ResponseEntity<>(userService.updateUserEmail(object) , HttpStatus.OK) ;
     }
 }
